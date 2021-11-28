@@ -9,7 +9,6 @@ import ru.gradius.math.Rect;
 
 public class Sprite extends Rect {
 
-
     protected float angle;
     protected float scale = 1f;
     protected TextureRegion[] regions;
@@ -29,7 +28,6 @@ public class Sprite extends Rect {
     }
 
     public void draw(SpriteBatch batch) {
-
         batch.draw(
                 regions[frame],
                 getLeft(), getBottom(),

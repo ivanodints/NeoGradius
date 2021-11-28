@@ -1,4 +1,4 @@
-package ru.gradius.sprite.Impl;
+package ru.gradius.sprite.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
