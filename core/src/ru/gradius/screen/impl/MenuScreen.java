@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import ru.gradius.math.Rect;
 import ru.gradius.screen.BaseScreen;
 import ru.gradius.sprite.Impl.Background;
+import ru.gradius.sprite.Impl.SpaceShip;
 
 public class MenuScreen extends BaseScreen {
 
@@ -13,8 +14,8 @@ public class MenuScreen extends BaseScreen {
     private Texture ship;
     private Texture space;
 
-    private Vector2 position;
     private Background background;
+    private SpaceShip spaceShip;
 
 
 
@@ -25,8 +26,8 @@ public class MenuScreen extends BaseScreen {
         super.show();
         space = new Texture("textures/warp.png");
         ship = new Texture("textures/thunderhawk-gunship.png");
+        spaceShip = new SpaceShip(ship);
         background = new Background(space);
-        position = new Vector2();
 
     }
 
@@ -34,6 +35,7 @@ public class MenuScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
+        spaceShip.resize(worldBounds);
     }
 
     @Override
@@ -42,7 +44,10 @@ public class MenuScreen extends BaseScreen {
 
         batch.begin();
         background.draw(batch);
+        spaceShip.draw(batch);
         batch.end();
+
+        spaceShip.move();
 
     }
 
@@ -56,7 +61,9 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
 
-        position.set(touch);
-        return super.touchDown(touch, pointer, button);
+        spaceShip.touchDown(touch, pointer, button);
+
+        return false;
     }
+
 }
