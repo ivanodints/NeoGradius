@@ -23,6 +23,7 @@ public class MenuScreen extends BaseScreen {
     private Background background;
 
     private TextureAtlas atlas;
+    private TextureAtlas atlas2;
     private Star[] stars;
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
@@ -38,13 +39,15 @@ public class MenuScreen extends BaseScreen {
         background = new Background(bg);
 
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
+        atlas2 = new TextureAtlas("textures/menu.pack");
+
 
         stars = new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = new Star(atlas);
         }
-        buttonExit = new ButtonExit(atlas);
-        buttonPlay = new ButtonPlay(atlas, game);
+        buttonExit = new ButtonExit(atlas2);
+        buttonPlay = new ButtonPlay(atlas2, game);
     }
 
     @Override
