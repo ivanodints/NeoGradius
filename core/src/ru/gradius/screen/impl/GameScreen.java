@@ -5,40 +5,46 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.gradius.math.Rect;
+import ru.gradius.pool.impl.BulletPool;
 import ru.gradius.screen.BaseScreen;
 import ru.gradius.sprite.impl.Background;
-import ru.gradius.sprite.impl.SpaceShip;
+import ru.gradius.sprite.impl.MainShip;
 import ru.gradius.sprite.impl.Star;
 
 public class GameScreen extends BaseScreen {
 
+    private static final int STAR_COUNT = 64;
+
     private Texture bg;
     private Background background;
-    private TextureAtlas atlas1;
-    private TextureAtlas atlas2;
+
+    private BulletPool bulletPool;
+
+    private TextureAtlas atlas;
     private Star[] stars;
-    private SpaceShip spaceShip;
-    private static final int STAR_COUNT = 256;
+    private MainShip mainShip;
 
     @Override
     public void show() {
         super.show();
         bg = new Texture("textures/warp.png");
-        atlas1 = new TextureAtlas("textures/spaceship.pack");
-        atlas2 = new TextureAtlas("textures/menuAtlas.tpack");
         background = new Background(bg);
-        spaceShip = new SpaceShip(atlas1);
+        atlas = new TextureAtlas("textures/mainAtlas.tpack");
+
+        bulletPool = new BulletPool();
 
         stars = new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
-            stars[i] = new Star(atlas2);
+            stars[i] = new Star(atlas);
         }
+        mainShip = new MainShip(atlas, bulletPool);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        freeAllDestroyed();
         draw();
     }
 
@@ -46,53 +52,64 @@ public class GameScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        spaceShip.resize(worldBounds);
         for (Star star : stars) {
             star.resize(worldBounds);
         }
-
-
+        mainShip.resize(worldBounds);
     }
 
     @Override
     public void dispose() {
         super.dispose();
         bg.dispose();
-        atlas1.dispose();
-        atlas2.dispose();
+        atlas.dispose();
+        bulletPool.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-
-        return spaceShip.touchDown(touch, pointer, button);
-
+        mainShip.touchDown(touch, pointer, button);
+        return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
+        mainShip.touchUp(touch, pointer, button);
+        return false;
+    }
 
-        return spaceShip.touchUp(touch, pointer, button);
+    @Override
+    public boolean keyDown(int keycode) {
+        mainShip.keyDown(keycode);
+        return false;
+    }
 
+    @Override
+    public boolean keyUp(int keycode) {
+        mainShip.keyUp(keycode);
+        return false;
     }
 
     private void update(float delta) {
-
-        spaceShip.update(delta);
-
         for (Star star : stars) {
             star.update(delta);
         }
+        mainShip.update(delta);
+        bulletPool.updateActiveSprites(delta);
+    }
+
+    private void freeAllDestroyed() {
+        bulletPool.freeAllDestroyed();
     }
 
     private void draw() {
         batch.begin();
         background.draw(batch);
-        spaceShip.draw(batch);
         for (Star star : stars) {
             star.draw(batch);
         }
+        mainShip.draw(batch);
+        bulletPool.drawActiveSprites(batch);
         batch.end();
-
     }
 }

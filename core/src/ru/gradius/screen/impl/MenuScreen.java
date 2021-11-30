@@ -14,7 +14,6 @@ import ru.gradius.sprite.impl.Star;
 
 public class MenuScreen extends BaseScreen {
 
-
     private static final int STAR_COUNT = 256;
 
     private final Game game;
@@ -24,6 +23,7 @@ public class MenuScreen extends BaseScreen {
 
     private TextureAtlas atlas;
     private TextureAtlas atlas2;
+
     private Star[] stars;
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
@@ -40,7 +40,6 @@ public class MenuScreen extends BaseScreen {
 
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
         atlas2 = new TextureAtlas("textures/menu.pack");
-
 
         stars = new Star[STAR_COUNT];
         for (int i = 0; i < stars.length; i++) {
@@ -108,5 +107,4 @@ public class MenuScreen extends BaseScreen {
         buttonPlay.draw(batch);
         batch.end();
     }
-
 }
