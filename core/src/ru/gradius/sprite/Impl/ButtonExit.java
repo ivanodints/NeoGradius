@@ -12,7 +12,7 @@ public class ButtonExit extends BaseButton {
     private static final float MARGIN = 0.03f;
 
     public ButtonExit(TextureAtlas atlas) {
-        super(atlas.findRegion("btExit"));
+        super(atlas.findRegion("quit"));
     }
 
     @Override

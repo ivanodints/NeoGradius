@@ -10,12 +10,12 @@ import ru.gradius.sprite.BaseButton;
 public class ButtonPlay extends BaseButton {
 
     private static final float HEIGHT = 0.25f;
-    private static final float MARGIN = 0.03f;
+    private static final float MARGIN = 0.005f;
 
     private final Game game;
 
     public ButtonPlay(TextureAtlas atlas, Game game) {
-        super(atlas.findRegion("btPlay"));
+        super(atlas.findRegion("start"));
         this.game = game;
     }
 
