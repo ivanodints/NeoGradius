@@ -1,6 +1,7 @@
 package ru.gradius.sprite.impl;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -14,6 +15,7 @@ public class MainShip extends Sprite {
     private static final float HEIGHT = 0.15f;
     private static final float BOTTOM_MARGIN = 0.05f;
     private static final int INVALID_POINTER = -1;
+    private static final float RAPID_FIRE = 0.05f;
 
     private final Vector2 v;
     private final Vector2 v0;
@@ -33,7 +35,10 @@ public class MainShip extends Sprite {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
+    private float timeForReload;
+    private final Sound shootingSound;
+
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootingSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.v = new Vector2();
         this.v0 = new Vector2(0.5f, 0f);
@@ -42,6 +47,7 @@ public class MainShip extends Sprite {
         this.bulletV = new Vector2(0, 0.5f);
         this.bulletHeight = 0.01f;
         this.damage = 1;
+        this.shootingSound = shootingSound;
     }
 
     @Override
@@ -54,20 +60,20 @@ public class MainShip extends Sprite {
     @Override
     public void update(float delta) {
         pos.mulAdd(v, delta);
-//        if (getRight() > worldBounds.getRight()) {
-//            setRight(worldBounds.getRight());
-//            stop();
-//        }
-//        if (getLeft() < worldBounds.getLeft()) {
-//            setLeft(worldBounds.getLeft());
-//            stop();
-//        }
 
-        if (getLeft() > worldBounds.getRight()) {
-            setRight(worldBounds.getLeft());
+        if (getRight() > worldBounds.getRight()) {
+            setRight(worldBounds.getRight());
+            stop();
         }
-        if (getRight() < worldBounds.getLeft()) {
-            setLeft(worldBounds.getRight());
+        if (getLeft() < worldBounds.getLeft()) {
+            setLeft(worldBounds.getLeft());
+            stop();
+        }
+
+        timeForReload = timeForReload + delta;
+        if (timeForReload >= RAPID_FIRE) {
+            timeForReload = 0f;
+            shoot();
         }
     }
 
@@ -167,5 +173,6 @@ public class MainShip extends Sprite {
     private void shoot() {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, damage);
+        shootingSound.play();
     }
 }
