@@ -1,13 +1,11 @@
 package ru.gradius.pool;
 
-
-import ru.gradius.sprite.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+import ru.gradius.sprite.Sprite;
 
 public abstract class SpritesPool<T extends Sprite> {
 
