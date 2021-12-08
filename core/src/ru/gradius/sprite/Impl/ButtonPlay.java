@@ -9,8 +9,8 @@ import ru.gradius.sprite.BaseButton;
 
 public class ButtonPlay extends BaseButton {
 
-    private static final float HEIGHT = 0.25f;
-    private static final float MARGIN = 0.0f;
+    private static final float HEIGHT = 0.24f;
+    private static final float MARGIN = 0.01f;
 
     private final Game game;
 

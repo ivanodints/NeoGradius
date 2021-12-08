@@ -6,11 +6,13 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.gradius.math.Rect;
 import ru.gradius.pool.impl.BulletPool;
+import ru.gradius.pool.impl.ExplosionPool;
 import ru.gradius.sprite.Ship;
 
 public class EnemyShip extends Ship {
 
-    public EnemyShip(BulletPool bulletPool, Sound bulletSound, Rect worldBounds) {
+    public EnemyShip(ExplosionPool explosionPool, BulletPool bulletPool, Sound bulletSound, Rect worldBounds) {
+        this.explosionPool = explosionPool;
         this.bulletPool = bulletPool;
         this.bulletSound = bulletSound;
         this.worldBounds = worldBounds;
@@ -21,10 +23,11 @@ public class EnemyShip extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
-        if (getTop() < worldBounds.getTop()) {
-            v.set(v0);
-        } else {
+        if (getTop() > worldBounds.getTop()) {
+            v.set(0, -0.3f);
             reloadTimer = reloadInterval * 0.8f;
+        } else {
+            v.set(v0);
         }
         if (getBottom() < worldBounds.getBottom()) {
             destroy();
@@ -43,7 +46,6 @@ public class EnemyShip extends Ship {
             int hp
     ) {
         this.regions = regions;
-        this.v.set(0, -0.8f);
         this.v0.set(v);
         this.bulletRegion = bulletRegion;
         this.bulletHeight = bulletHeight;
@@ -52,5 +54,13 @@ public class EnemyShip extends Ship {
         this.reloadInterval = reloadInterval;
         setHeightProportion(height);
         this.hp = hp;
+    }
+
+    public boolean isBulletCollision(Bullet bullet) {
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > getTop()
+                || bullet.getTop() < pos.y
+        );
     }
 }
