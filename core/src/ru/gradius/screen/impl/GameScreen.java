@@ -16,6 +16,7 @@ import ru.gradius.pool.impl.ExplosionPool;
 import ru.gradius.screen.BaseScreen;
 import ru.gradius.sprite.impl.Background;
 import ru.gradius.sprite.impl.Bullet;
+import ru.gradius.sprite.impl.ButtonNewGame;
 import ru.gradius.sprite.impl.EnemyShip;
 import ru.gradius.sprite.impl.GameOver;
 import ru.gradius.sprite.impl.MainShip;
@@ -29,6 +30,7 @@ public class GameScreen extends BaseScreen {
     private Texture bg;
     private Background background;
     private GameOver gameOver;
+    private ButtonNewGame buttonNewGame;
 
     private ExplosionPool explosionPool;
     private BulletPool bulletPool;
@@ -56,6 +58,7 @@ public class GameScreen extends BaseScreen {
         explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
 
         gameOver = new GameOver(atlas);
+        buttonNewGame = new ButtonNewGame(atlas, this);
 
         explosionPool = new ExplosionPool(atlas, explosionSound);
         bulletPool = new BulletPool();
@@ -92,6 +95,7 @@ public class GameScreen extends BaseScreen {
         }
         mainShip.resize(worldBounds);
         gameOver.resize(worldBounds);
+        buttonNewGame.resize(worldBounds);
     }
 
     @Override
@@ -110,13 +114,21 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        mainShip.touchDown(touch, pointer, button);
+        if (!mainShip.isDestroyed()) {
+            mainShip.touchDown(touch, pointer, button);
+        } else {
+            buttonNewGame.touchDown(touch, pointer, button);
+        }
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        mainShip.touchUp(touch, pointer, button);
+        if (!mainShip.isDestroyed()) {
+            mainShip.touchUp(touch, pointer, button);
+        } else {
+            buttonNewGame.touchUp(touch, pointer, button);
+        }
         return false;
     }
 
@@ -202,8 +214,18 @@ public class GameScreen extends BaseScreen {
             enemyPool.drawActiveSprites(batch);
         } else {
             gameOver.draw(batch);
+            buttonNewGame.draw(batch);
         }
         explosionPool.drawActiveSprites(batch);
         batch.end();
+    }
+
+    public void startNewGame() {
+
+        mainShip.resetGame();
+
+        bulletPool.freeAllActiveObjects();
+        explosionPool.freeAllActiveObjects();
+        enemyPool.freeAllActiveObjects();
     }
 }

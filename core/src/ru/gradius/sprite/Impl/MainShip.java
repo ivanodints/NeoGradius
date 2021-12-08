@@ -36,7 +36,7 @@ public class MainShip extends Ship {
         this.damage = 1;
         this.reloadInterval = RELOAD_INTERVAL;
         this.reloadTimer = 0;
-        this.hp = 100;
+        this.hp = 10;
     }
 
     @Override
@@ -155,6 +155,11 @@ public class MainShip extends Ship {
 
     private void stop() {
         v.setZero();
+    }
+
+    public void resetGame() {
+        this.hp = 10;
+        flushDestroy();
     }
 
 }
