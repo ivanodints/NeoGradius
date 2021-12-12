@@ -8,8 +8,8 @@ import ru.gradius.sprite.BaseButton;
 
 public class ButtonNewGame extends BaseButton {
 
-    private static final float HEIGHT = 0.08f;
-
+    private static final float HEIGHT = 0.05f;
+    private static final float MARGIN = -0.04f;
 
     private final GameScreen gameScreen;
 
@@ -20,8 +20,9 @@ public class ButtonNewGame extends BaseButton {
 
     @Override
     public void resize(Rect worldBounds) {
+        super.resize(worldBounds);
         setHeightProportion(HEIGHT);
-
+        setBottom(MARGIN);
     }
 
     @Override
